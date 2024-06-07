@@ -19,7 +19,7 @@ class checkLogin
         if(Auth::check()){
             return $next($request);
         }else{
-            return $next($request);
+            return redirect()->route('login');
         }
     }
 }
