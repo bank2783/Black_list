@@ -17,7 +17,8 @@ Route::middleware([checkLogin::class])->group(function () {
     Route::post('store-roster',[RosterController::class,'storeRoster'])->name('store_roster');
     Route::post('edit-roster/{id}',[RosterController::class,'editRoster'])->name('editRoster');
     Route::post('delete-roster/{id}',[RosterController::class,'destroyRoster'])->name('delete_roster');
-    
+    Route::get('create-user',[AuthController::class,'createUserView'])->name('create-user');
+    Route::post('create-user',[AuthController::class,'createUser'])->name('create_user_post');
 });
 
 Route::get('login',[AuthController::class,'loginView'])->name('login');

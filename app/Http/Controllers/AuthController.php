@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -40,5 +41,38 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
+    }
+
+    public function createUser(Request $request){
+
+        $validate = $request->validate([
+            'name'=> 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required'
+        ],
+        [
+            'email.uniqe' => 'อีเมลล์นี้ถูกใช้ไปแล้ว'
+        ]
+    
+        );
+
+        $user_insert = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            
+        ]);
+        if($user_insert){
+            return redirect()->back()->with('message','sucess');
+        }
+        else{
+            back()->withErrors([
+                'email' => 'อีเมลล์ซ้ำกัน+',
+            ]);
+        }
+    }
+    public function createUserView(){
+
+        return view('auth.add_user');
     }
 }
